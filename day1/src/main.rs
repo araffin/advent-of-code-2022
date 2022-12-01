@@ -32,5 +32,6 @@ fn part1(input: &str) {
 
 fn main() {
     let part1_input = include_str!("../input.txt");
-    part1(part1_input);
+    // let part1_input = std::fs::read_to_string("input.txt").unwrap();
+    part1(&part1_input);
 }
