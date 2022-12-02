@@ -47,7 +47,7 @@ fn part2() {
             }
         };
     }
-    // Sor the calories vector
+    // Sort the calories vector
     calories.sort();
     // Print the top 3
     println!(
