@@ -36,7 +36,7 @@ fn part1() {
     for i in 0..max_stack_size {
         let line = input.lines().nth(max_stack_size - i - 1).unwrap();
         for j in 0..num_stacks {
-            let index = j * 3 + j + 1;
+            let index = 4 * j + 1;
             match line.chars().nth(index) {
                 Some(c) if c.is_alphanumeric() => stacks[j].push(c),
                 _ => continue,
@@ -111,7 +111,7 @@ fn part2() {
     for i in 0..max_stack_size {
         let line = input.lines().nth(max_stack_size - i - 1).unwrap();
         for j in 0..num_stacks {
-            let index = j * 3 + j + 1;
+            let index = 4 * j + 1;
             match line.chars().nth(index) {
                 Some(c) if c.is_alphanumeric() => stacks[j].push(c),
                 _ => continue,
