@@ -1,5 +1,4 @@
 use regex::Regex;
-use took::Timer;
 
 fn part1() {
     // Parse the input
@@ -161,10 +160,6 @@ fn part2() {
     // println!("Final string: {}", final_string);
 }
 fn main() {
-    let timer = Timer::new();
     part1();
-    println!("Done! Took {}", timer.took());
-    let timer = Timer::new();
     part2();
-    println!("Done! Took {}", timer.took());
 }
