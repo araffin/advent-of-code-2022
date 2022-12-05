@@ -7,6 +7,7 @@ name = "advent2022"
 version = "0.1.0"
 dependencies = [
  "regex",
+ "took",
 ]
 
 [[package]]
@@ -40,3 +41,9 @@ name = "regex-syntax"
 version = "0.6.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "456c603be3e8d448b072f410900c09faf164fbce2d480456f50eea6e25f9c848"
+
+[[package]]
+name = "took"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af1ea65cb083be6f0b13ba9a26eec5eb563e55198e318cbb0f525d593fbd349e"
