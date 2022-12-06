@@ -1,4 +1,4 @@
-# Advent of code 2022 in Rust
+# Advent of code 2022 in Rust - Easy to read solutions
 
 In each folder:
 ```
