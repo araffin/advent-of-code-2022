@@ -52,12 +52,13 @@ fn part2() {
         let third_line_set: HashSet<char> = line_three.chars().collect();
 
         // Get the intersection of the three sets
-        let intersection: HashSet<&char> = firt_line_set.intersection(&second_line_set).collect();
-        // Convert the intersection from HashSet<&char> to HashSet<char>
-        let intersection_owned: HashSet<char> = intersection.iter().map(|&x| x.clone()).collect();
+        let intersection: HashSet<char> = firt_line_set
+            .intersection(&second_line_set)
+            .cloned()
+            .collect();
         // Take the intersection of the previous intersection and the third set
-        let final_intersection: HashSet<_> =
-            intersection_owned.intersection(&third_line_set).collect();
+        let final_intersection: HashSet<&char> =
+            intersection.intersection(&third_line_set).collect();
 
         // There should be only one character in the intersection
         assert_eq!(final_intersection.len(), 1);
