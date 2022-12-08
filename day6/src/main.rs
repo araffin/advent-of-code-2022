@@ -8,8 +8,9 @@ fn part1() {
     let characters: Vec<char> = input.chars().collect();
 
     // Process the input with a sliding window of 4 characters
-    let mut starting_pos = 4;
-    for four_characters in characters.windows(4) {
+    let n_unique_characters = 4;
+    let mut starting_pos = n_unique_characters;
+    for four_characters in characters.windows(n_unique_characters) {
         // Create a set from the characters in the window
         let set: HashSet<char> = four_characters.iter().cloned().collect();
 
@@ -17,7 +18,7 @@ fn part1() {
         // println!("{:?}", set);
 
         // 4 unique characters
-        if set.len() == 4 {
+        if set.len() == n_unique_characters {
             break;
         }
         starting_pos += 1;
@@ -33,13 +34,14 @@ fn part2() {
     let characters: Vec<char> = input.chars().collect();
 
     // Process the input with a sliding window of 14 characters
-    let mut starting_pos = 14;
-    for char_window in characters.windows(14) {
+    let n_unique_characters = 14;
+    let mut starting_pos = n_unique_characters;
+    for char_window in characters.windows(n_unique_characters) {
         // Create a set from the characters in the window
         let set: HashSet<&char> = char_window.iter().collect();
 
         // 14 unique characters
-        if set.len() == 14 {
+        if set.len() == n_unique_characters {
             break;
         }
         starting_pos += 1;
