@@ -124,6 +124,27 @@ fn part1_and_2() {
     }
 
     println!("Part 1: {}", sum);
+
+    let total_disk_space: u64 = 70000000;
+    let min_free_space: u64 = 30000000;
+    let total_used_space: u64 = all_nodes.get(0).unwrap().value;
+    let total_free_space: u64 = total_disk_space - total_used_space;
+    let space_needed: u64 = min_free_space - total_free_space;
+
+    println!("total used space: {}", total_used_space);
+    println!("total free space: {}", total_free_space);
+    println!("space needed: {}", space_needed);
+
+    // Find the folder such has when we delete it
+    // we have enough free space
+    let mut min_folder_size = total_disk_space;
+    for node in all_nodes.iter() {
+        if node.value > space_needed && !node.children.is_empty() && node.value < min_folder_size {
+            min_folder_size = node.value;
+        }
+    }
+
+    println!("Part 2: {}", min_folder_size);
 }
 
 fn main() {
