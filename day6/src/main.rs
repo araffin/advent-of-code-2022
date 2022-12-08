@@ -36,12 +36,9 @@ fn part2() {
     let mut starting_pos = 14;
     for char_window in characters.windows(14) {
         // Create a set from the characters in the window
-        let set: HashSet<char> = char_window.iter().cloned().collect();
+        let set: HashSet<&char> = char_window.iter().collect();
 
-        // Print the set
-        // println!("{:?}", set);
-
-        // 4 unique characters
+        // 14 unique characters
         if set.len() == 14 {
             break;
         }
