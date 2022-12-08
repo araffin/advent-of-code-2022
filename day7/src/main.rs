@@ -9,7 +9,7 @@ struct Node {
     parent: Option<usize>,
 }
 
-fn part1() {
+fn part1_and_2() {
     // Parse the input
     let input = std::fs::read_to_string("input.txt").unwrap();
 
@@ -23,14 +23,14 @@ fn part1() {
         value: 0,
     };
     all_nodes.push(root);
-    
+
     let mut current_node = 0;
 
     for line in input.lines() {
         let (start, rest) = line.split_once(" ").unwrap();
         match start {
             "$" if rest == "ls" => continue,
-            "$" if rest != "ls" => {
+            "$" => {
                 // cd command: cd folder_name
                 let (_, folder_name) = rest.split_once(" ").unwrap();
                 match folder_name {
@@ -38,8 +38,8 @@ fn part1() {
                     ".." => {
                         // Go to the parent node
                         current_node = all_nodes.get(current_node).unwrap().parent.unwrap();
-                        continue
-                    },
+                        continue;
+                    }
                     _ => {
                         let new_node_id = all_nodes.len();
                         // Create a folder node and add it to the parent
@@ -50,16 +50,16 @@ fn part1() {
                             value: 0,
                         };
                         all_nodes.push(new_node);
-                        all_nodes.get_mut(current_node).unwrap().children.push(new_node_id);
+                        all_nodes
+                            .get_mut(current_node)
+                            .unwrap()
+                            .children
+                            .push(new_node_id);
                         current_node = all_nodes.len() - 1;
-                    },
+                    }
                 }
             }
-            "dir" => {
-                continue
-                // let folder_name = rest;
-                // println!("{} {}", start, folder_name);
-            },
+            "dir" => continue,
             _ => {
                 let name = rest;
                 let filesize = start.parse::<u64>().unwrap();
@@ -74,9 +74,12 @@ fn part1() {
                     value: filesize,
                 };
                 all_nodes.push(new_node);
-                all_nodes.get_mut(current_node).unwrap().children.push(new_node_id);
-
-            },
+                all_nodes
+                    .get_mut(current_node)
+                    .unwrap()
+                    .children
+                    .push(new_node_id);
+            }
         }
     }
 
@@ -111,7 +114,6 @@ fn part1() {
         }
     }
 
-    
     // Sum all nodes that have a value below 100000 and that have children
     let mut sum = 0;
     for node in all_nodes.iter() {
@@ -122,9 +124,8 @@ fn part1() {
     }
 
     println!("Part 1: {}", sum);
-
 }
 
 fn main() {
-    part1();
+    part1_and_2();
 }
