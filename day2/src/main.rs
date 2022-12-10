@@ -14,7 +14,7 @@ fn part1() {
     let mut total_score = 0;
 
     for line in input.lines() {
-        let (player1, player2) = line.split_once(" ").unwrap();
+        let (player1, player2) = line.split_once(' ').unwrap();
         let score = match (convert_to_score(player1), convert_to_score(player2)) {
             // Player 1 wins
             (1, p2 @ 3) | (2, p2 @ 1) | (3, p2 @ 2) => p2,
@@ -36,7 +36,7 @@ fn part2() {
     let mut total_score = 0;
 
     for line in input.lines() {
-        let (player1, player2) = line.split_once(" ").unwrap();
+        let (player1, player2) = line.split_once(' ').unwrap();
 
         let score = match (convert_to_score(player1), player2) {
             // We need to lose

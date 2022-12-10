@@ -14,12 +14,12 @@ fn part1() {
 
     let starting_point = Point { x: 0, y: 0 };
     let mut tail_position = starting_point.clone();
-    let mut head_position = starting_point.clone();
+    let mut head_position = starting_point;
 
     visited_points.insert(tail_position.clone());
 
     for line in input.lines() {
-        let (direction, steps) = line.split_once(" ").unwrap();
+        let (direction, steps) = line.split_once(' ').unwrap();
         let steps = steps.parse::<i32>().unwrap();
 
         // println!("{} {} ", direction, steps);
@@ -86,7 +86,7 @@ fn part2() {
     visited_points.insert(rope[n_points - 1].clone());
 
     for line in input.lines() {
-        let (direction, steps) = line.split_once(" ").unwrap();
+        let (direction, steps) = line.split_once(' ').unwrap();
         let steps = steps.parse::<i32>().unwrap();
 
         // println!("{} {} ", direction, steps);

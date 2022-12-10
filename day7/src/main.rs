@@ -27,12 +27,12 @@ fn part1_and_2() {
     let mut current_node = 0;
 
     for line in input.lines() {
-        let (start, rest) = line.split_once(" ").unwrap();
+        let (start, rest) = line.split_once(' ').unwrap();
         match start {
             "$" if rest == "ls" => continue,
             "$" => {
                 // cd command: cd folder_name
-                let (_, folder_name) = rest.split_once(" ").unwrap();
+                let (_, folder_name) = rest.split_once(' ').unwrap();
                 match folder_name {
                     "/" => continue,
                     ".." => {

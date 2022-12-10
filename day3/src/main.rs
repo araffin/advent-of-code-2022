@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 
 fn letter_position(letter: char) -> u8 {
-    letter as u8 - ('a' as u8) + 1
+    letter as u8 - b'a' + 1
 }
 
 fn get_priority(letter: char) -> u8 {
@@ -27,8 +27,8 @@ fn part1() {
         // There should be only one character in the intersection
         assert_eq!(intersection.len(), 1);
         // Retrieve the character from the intersection
-        let letter = intersection.iter().next().unwrap().clone();
-        total += get_priority(*letter) as u32;
+        let letter = intersection.iter().next().unwrap();
+        total += get_priority(**letter) as u32;
     }
     // Print the total
     println!("{}", total);
@@ -63,8 +63,8 @@ fn part2() {
         // There should be only one character in the intersection
         assert_eq!(final_intersection.len(), 1);
         // Retrieve the character from the intersection
-        let letter = final_intersection.iter().next().unwrap().clone();
-        total += get_priority(*letter) as u32;
+        let letter = final_intersection.iter().next().unwrap();
+        total += get_priority(**letter) as u32;
     }
 
     // Print the total
