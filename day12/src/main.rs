@@ -6,7 +6,9 @@ fn is_accessible(current_height: u8, (x, y): Point, height_map: &[Vec<u8>]) -> b
     let neighbor_height = height_map[x][y];
     // neighbor is accessible if the height difference is at most 1
     // or lower
-    (neighbor_height as i8 - current_height as i8) <= 1
+    // (neighbor_height as i8 - current_height as i8) <= 1
+    // Note we go from start to the end, so the condition is the opposite
+    (current_height as i8 - neighbor_height as i8) <= 1
 }
 
 fn neighbors((x, y): Point, height_map: &Vec<Vec<u8>>) -> Vec<Point> {
@@ -28,7 +30,7 @@ fn neighbors((x, y): Point, height_map: &Vec<Vec<u8>>) -> Vec<Point> {
     neighbors
 }
 
-fn part1() {
+fn part1_and_2() {
     // Parse the input
     let input = std::fs::read_to_string("input.txt").unwrap();
 
@@ -57,6 +59,10 @@ fn part1() {
                 .collect()
         })
         .collect();
+
+    // To make part2 easier
+    // start from the end
+    let (start, end) = (end, start);
 
     // Dijkstra's algorithm
     // Note: we would need to use a priority queue for A*
@@ -91,15 +97,21 @@ fn part1() {
 
     // Print the length of the shortest path
     println!("Part1: {}", cost_so_far.get(&end).unwrap());
-    // Print the path
-    // let mut current = end;
-    // while let Some(next) = came_from.get(&current).unwrap() {
-    //     let (x, y) = current;
-    //     println!("{:?} {}", current, height_map[x][y] as char);
-    //     current = *next;
-    // }
+
+    // Post process: find the shortest path
+    // to any lowest point (b'a' to end)
+    let mut shortest_path = std::u64::MAX;
+    for point in cost_so_far.keys() {
+        if height_map[point.0][point.1] == b'a' {
+            let path_length = cost_so_far.get(point).unwrap();
+            if path_length < &shortest_path {
+                shortest_path = *path_length;
+            }
+        }
+    }
+    println!("Part2: {}", shortest_path);
 }
 
 fn main() {
-    part1();
+    part1_and_2();
 }
