@@ -1,11 +1,13 @@
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 type Point = (usize, usize);
 
 fn is_accessible(current_height: u8, (x, y): Point, height_map: &[Vec<u8>]) -> bool {
     let neighbor_height = height_map[x][y];
     // neighbor is accessible if the height difference is at most 1
-    (current_height as i8 - neighbor_height as i8).abs() <= 1
+    // or lower
+    (neighbor_height as i8 - current_height as i8) <= 1
 }
 
 fn neighbors((x, y): Point, height_map: &Vec<Vec<u8>>) -> Vec<Point> {
@@ -67,8 +69,22 @@ fn part1() {
     came_from.insert(start, None);
     cost_so_far.insert(start, 0);
 
+    let mut visited_nodes: HashSet<Point> = HashSet::new();
+
     while !queue.is_empty() {
         let current = queue.pop().unwrap();
+
+        // Do not do early stopping for finding the shortest path
+        // if current == end {
+        //     break;
+        // }
+
+        visited_nodes.insert(current);
+
+        let neighbors_vec = neighbors(current, &height_map);
+        if neighbors_vec.is_empty() {
+            println!("Found a dead end at {:?}", current);
+        }
 
         for next in neighbors(current, &height_map) {
             let new_cost = cost_so_far.get(&current).unwrap() + 1;
@@ -83,29 +99,26 @@ fn part1() {
         }
     }
 
-    // Print the map with the path
-    // showing all the directions
-    // let mut current = last_visited;
-    // let mut current = end;
-    // let mut height_map = height_map;
-    // while let Some(next) = came_from.get(&current).unwrap() {
-    //     let (x, y) = current;
-    //     let (nx, ny) = *next;
-    //     if x == nx {
-    //         if y < ny {
-    //             height_map[x][y] = b'>';
-    //         } else {
-    //             height_map[x][y] = b'<';
-    //         }
-    //     } else {
-    //         if x < nx {
-    //             height_map[x][y] = b'v';
-    //         } else {
-    //             height_map[x][y] = b'^';
-    //         }
-    //     }
-    //     current = *next;
-    // }
+    let total_nodes = height_map.len() * height_map[0].len();
+    println!("Total nodes: {}", total_nodes);
+    println!("Visited {} unique nodes", visited_nodes.len());
+
+    // print the map with the visited nodes
+    for (x, line) in height_map.iter().enumerate() {
+        println!(
+            "{}",
+            line.iter()
+                .enumerate()
+                .map(|(y, c)| {
+                    if visited_nodes.contains(&(x, y)) {
+                        '*'
+                    } else {
+                        *c as char
+                    }
+                })
+                .collect::<String>()
+        );
+    }
 
     // // Print the new map
     // for line in height_map {
