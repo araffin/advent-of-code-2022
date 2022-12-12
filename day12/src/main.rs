@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::collections::HashSet;
 
 type Point = (usize, usize);
 
@@ -69,8 +68,6 @@ fn part1() {
     came_from.insert(start, None);
     cost_so_far.insert(start, 0);
 
-    let mut visited_nodes: HashSet<Point> = HashSet::new();
-
     while !queue.is_empty() {
         let current = queue.pop().unwrap();
 
@@ -78,13 +75,6 @@ fn part1() {
         // if current == end {
         //     break;
         // }
-
-        visited_nodes.insert(current);
-
-        let neighbors_vec = neighbors(current, &height_map);
-        if neighbors_vec.is_empty() {
-            println!("Found a dead end at {:?}", current);
-        }
 
         for next in neighbors(current, &height_map) {
             let new_cost = cost_so_far.get(&current).unwrap() + 1;
@@ -98,37 +88,6 @@ fn part1() {
             }
         }
     }
-
-    let total_nodes = height_map.len() * height_map[0].len();
-    println!("Total nodes: {}", total_nodes);
-    println!("Visited {} unique nodes", visited_nodes.len());
-
-    // print the map with the visited nodes
-    for (x, line) in height_map.iter().enumerate() {
-        println!(
-            "{}",
-            line.iter()
-                .enumerate()
-                .map(|(y, c)| {
-                    if visited_nodes.contains(&(x, y)) {
-                        '*'
-                    } else {
-                        *c as char
-                    }
-                })
-                .collect::<String>()
-        );
-    }
-
-    // // Print the new map
-    // for line in height_map {
-    //     println!(
-    //         "{}",
-    //         line.iter()
-    //             .map(|c| *c as char)
-    //             .collect::<String>()
-    //     );
-    // }
 
     // Print the length of the shortest path
     println!("Part1: {}", cost_so_far.get(&end).unwrap());
