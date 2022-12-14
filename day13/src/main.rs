@@ -4,7 +4,9 @@ fn compare_digits(line1: &str, line2: &str, idx: usize) -> Option<bool> {
 
     // Special case to deal with 10
     match (next_character_1, next_character_2) {
-        (Some(a), Some(b)) if a.is_ascii_digit() ^ b.is_ascii_digit() => return Some(b.is_ascii_digit()),
+        (Some(a), Some(b)) if a.is_ascii_digit() ^ b.is_ascii_digit() => {
+            return Some(b.is_ascii_digit())
+        }
         _ => None,
     }
 }
@@ -25,30 +27,46 @@ fn compare(line1: &str, line2: &str) -> bool {
             (Some('['), Some(b)) if b.is_ascii_digit() => {
                 // convert value to list
                 // and concatenate the list to the rest of the string
+                let next_character = line2.chars().clone().nth(idx);
+                if next_character == Some('0') {
+                    let new_string = format!("[{}0]{}", b, &line2[idx + 1..]);
+                    return compare(&line1[idx - 1..], &new_string);
+                }
+
                 let new_string = format!("[{}]{}", b, &line2[idx..]);
                 return compare(&line1[idx - 1..], &new_string);
             }
             (Some(a), Some('[')) if a.is_ascii_digit() => {
                 // convert value to list
                 // and concatenate the list to the rest of the string
+                let next_character = line1.chars().clone().nth(idx);
+                if next_character == Some('0') {
+                    let new_string = format!("[{}0]{}", a, &line1[idx + 1..]);
+                    return compare(&new_string, &line2[idx - 1..]);
+                }
+
                 let new_string = format!("[{}]{}", a, &line1[idx..]);
                 return compare(&new_string, &line2[idx - 1..]);
             }
 
             (Some(a), Some(b)) if a.is_ascii_digit() && b.is_ascii_digit() => {
                 match (a.to_digit(10).unwrap(), b.to_digit(10).unwrap()) {
-                    (a_num @ 1, b_num) | (a_num, b_num @ 1)  => {
+                    (a_num @ 1, b_num) | (a_num, b_num @ 1) => {
                         match compare_digits(line1, line2, idx) {
                             Some(result) => return result,
-                            None => if a_num == b_num { continue } else { return a_num < b_num },
+                            None => {
+                                if a_num == b_num {
+                                    continue;
+                                } else {
+                                    return a_num < b_num;
+                                }
+                            }
                         }
                     }
-                    (a_num, b_num) if a_num == b_num => {
-                        match compare_digits(line1, line2, idx) {
-                            Some(result) => return result,
-                            None => continue,
-                        }
-                    }
+                    (a_num, b_num) if a_num == b_num => match compare_digits(line1, line2, idx) {
+                        Some(result) => return result,
+                        None => continue,
+                    },
                     (a_num, b_num) => {
                         match compare_digits(line1, line2, idx) {
                             Some(result) => return result,
@@ -61,10 +79,12 @@ fn compare(line1: &str, line2: &str) -> bool {
             // right run out of values
             (Some(a), Some(']')) if a == '[' || a.is_ascii_digit() => return false,
             (Some(a), Some('[')) if a.is_ascii_digit() => return false,
+            (Some(a), Some(',')) if a.is_ascii_digit() => return false,
 
             // left run out of values
             (Some(']'), Some(b)) if b == '[' || b.is_ascii_digit() => return true,
             (Some(']'), Some(b)) if b.is_ascii_digit() => return true,
+            (Some(','), Some(b)) if b.is_ascii_digit() => return true,
 
             // left run out of values
             (None, Some(_)) => return true,
@@ -94,10 +114,6 @@ fn part1() {
             total += pair_idx + 1;
             println!("Pair {} in order: {}", pair_idx + 1, in_order);
         }
-
-        // if pair_idx == 5 {
-        //     break;
-        // }
     }
     println!("Total: {}", total);
 }
