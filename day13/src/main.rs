@@ -116,6 +116,7 @@ fn part1() {
         }
     }
     println!("Total: {}", total);
+    panic!("Careful, this code is buggy, shoudln't solve it character by character")
 }
 
 fn main() {
