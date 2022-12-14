@@ -1,15 +1,26 @@
+fn compare_digits(line1: &str, line2: &str, idx: usize) -> Option<bool> {
+    let next_character_1 = line1.chars().clone().nth(idx);
+    let next_character_2 = line2.chars().clone().nth(idx);
+
+    // Special case to deal with 10
+    match (next_character_1, next_character_2) {
+        (Some(a), Some(b)) if a.is_ascii_digit() ^ b.is_ascii_digit() => return Some(b.is_ascii_digit()),
+        _ => None,
+    }
+}
+
 fn compare(line1: &str, line2: &str) -> bool {
-    let mut a = line1.chars();
-    let mut b = line2.chars();
-    let mut idx = 0;
+    let mut line1_chars = line1.chars();
+    let mut line2_chars = line2.chars();
+    let mut idx: usize = 0;
     // println!("Comparing {} to {}", line1, line2);
 
     loop {
         idx += 1;
 
-        match (a.next(), b.next()) {
-            (Some('['), Some('[')) => continue,
-            (Some(']'), Some(']')) => continue,
+        // println!("Comparing {} to {}", &line1[idx..], &line2[idx..]);
+
+        match (line1_chars.next(), line2_chars.next()) {
             // Comparing list to value
             (Some('['), Some(b)) if b.is_ascii_digit() => {
                 // convert value to list
@@ -24,21 +35,44 @@ fn compare(line1: &str, line2: &str) -> bool {
                 return compare(&new_string, &line2[idx - 1..]);
             }
 
-            (Some(a), Some(b)) if a.is_ascii_digit()  && b.is_ascii_digit() => match (a.to_digit(10), b.to_digit(10)) {
-                (Some(a), Some(b)) if a == b => continue,
-                (Some(a), Some(b)) => return a < b,
-                (None, None) => continue,
-                _ => return false,
-            },
+            (Some(a), Some(b)) if a.is_ascii_digit() && b.is_ascii_digit() => {
+                match (a.to_digit(10).unwrap(), b.to_digit(10).unwrap()) {
+                    (a_num @ 1, b_num) | (a_num, b_num @ 1)  => {
+                        match compare_digits(line1, line2, idx) {
+                            Some(result) => return result,
+                            None => if a_num == b_num { continue } else { return a_num < b_num },
+                        }
+                    }
+                    (a_num, b_num) if a_num == b_num => {
+                        match compare_digits(line1, line2, idx) {
+                            Some(result) => return result,
+                            None => continue,
+                        }
+                    }
+                    (a_num, b_num) => {
+                        match compare_digits(line1, line2, idx) {
+                            Some(result) => return result,
+                            None => (),
+                        }
+                        return a_num < b_num;
+                    }
+                }
+            }
             // right run out of values
             (Some(a), Some(']')) if a == '[' || a.is_ascii_digit() => return false,
+            (Some(a), Some('[')) if a.is_ascii_digit() => return false,
+
             // left run out of values
             (Some(']'), Some(b)) if b == '[' || b.is_ascii_digit() => return true,
+            (Some(']'), Some(b)) if b.is_ascii_digit() => return true,
+
             // left run out of values
             (None, Some(_)) => return true,
             // right run out of values
             (Some(_), None) => return false,
-            (None, None) => return true,
+            (None, None) => panic!("Invalid input"),
+            // (Some('['), Some('[')) => continue,
+            // (Some(']'), Some(']')) => continue,
             _ => continue,
         }
     }
@@ -58,7 +92,12 @@ fn part1() {
 
         if in_order {
             total += pair_idx + 1;
+            println!("Pair {} in order: {}", pair_idx + 1, in_order);
         }
+
+        // if pair_idx == 5 {
+        //     break;
+        // }
     }
     println!("Total: {}", total);
 }
